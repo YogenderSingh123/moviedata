@@ -1,14 +1,25 @@
 import React from "react";
 import { Card } from "react-bootstrap";
 import cross from "../cross.svg";
-
-function MovieCard({movie,deleteMovie}) {
+import updateicon from "../updateicon.svg";
+import Rate from "./Rate";
+function MovieCard({ movie,updateMovie, deleteMovie }) {
   return (
     <div>
-      <Card >
+      <Card>
         <Card.Body className="bg-info">
-            <h4>{movie.name} <img className="float-right" onClick={()=>deleteMovie(movie.index)} src={cross}/> </h4>
-            <h6>this is {movie.name}</h6>
+          <h4>
+            {movie.name} <Rate rating={movie.rating}/>
+            <img
+              className="float-right"
+              onClick={() => deleteMovie(movie.index)}
+              src={cross}
+            />{" "}
+            <img className="float-right " 
+              onClick={() => updateMovie(movie.index)}
+              src={updateicon} />
+          </h4>
+          <h6>This is {movie.genre} movie</h6>
         </Card.Body>
       </Card>
     </div>
