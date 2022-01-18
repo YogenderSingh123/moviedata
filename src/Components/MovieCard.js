@@ -3,6 +3,7 @@ import { Card } from "react-bootstrap";
 import cross from "../cross.svg";
 import updateicon from "../updateicon.svg";
 import Rate from "./Rate";
+
 function MovieCard({ movie,updateMovie, deleteMovie }) {
   return (
     <div>
