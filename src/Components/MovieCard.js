@@ -12,15 +12,15 @@ function MovieCard({ movie,updateMovie, deleteMovie }) {
           <h4>
             {movie.name} <Rate rating={movie.rating}/>
             <img
-              className="float-right"
+              className="float-right" alt="delete"
               onClick={() => deleteMovie(movie.index)}
               src={cross}
             />{" "}
-            <img className="float-right " 
+            <img className="float-right " alt="update"
               onClick={() => updateMovie(movie.index)}
               src={updateicon} />
           </h4>
-          <h6>This is {movie.genre} movie</h6>
+          <h6>This is {movie.details} movie</h6>
         </Card.Body>
       </Card>
     </div>

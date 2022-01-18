@@ -9,7 +9,7 @@ function Rate({rating}) {
     return (
         <span>
          {
-            ratings.map(r=>r===1?<img src={starFill}/>:<img src={star}/>)
+            ratings.map(r=>r===1?<img src={starFill} alt='starfill'/>:<img src={star} alt='star'/>)
          }
         </span>
     )
