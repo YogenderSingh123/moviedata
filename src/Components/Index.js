@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, {  useEffect, useState } from "react";
 import { Formik } from "formik";
 import { Form, Button} from "react-bootstrap";
 import MovieCard from "./MovieCard";
 import * as Yup from "yup";
 import {useSelector,useDispatch} from 'react-redux'
 import {addMovieAction,deleteMovieAction,updateMovieAction} from '../redux/action'
-
+import { createMovie, deleteMovieWithId, getAllMovies, updateMovie } from "../Service/backend";
+import { v4 as uuidv4 } from 'uuid';
 function Index() {
   const myState = useSelector((state) => state.movie.movieList);
-  console.log('myState',myState)
   const dispatch = useDispatch();
   const validate = Yup.object({
     name: Yup.string()
@@ -23,6 +23,7 @@ function Index() {
   });
   const [data, setdata] = useState([]);
   const [initialValues, setInitailValues] = useState({
+    id:uuidv4(),
     name: "",
     details: "",
     genre: "",
@@ -30,16 +31,24 @@ function Index() {
   });
   const [isUpdate, setisUpdate] = useState(false);
   const [currentIndex, setcurrentIndex] = useState(0);
-  const deleteMovie = (index) => {
+  const deleteMovie =async (index,id) => {
     let temp = [...data];
+    await deleteMovieWithId(id);
     temp.splice(index, 1);
     setdata(temp);
   dispatch(deleteMovieAction(temp));
   };
+  const getAllMovie= async()=>{
+    const movies= await getAllMovies();
+    setdata(movies);
+    dispatch(updateMovieAction(movies))
+  }
+  useEffect(async () => {
+    getAllMovie();
+  }, []);
   const UpdateMovie1 = (index) => {
     let temp = [...data];
     let recordUpdate = temp[index];
-    console.log("value is ",recordUpdate);
     setInitailValues(recordUpdate); 
     setisUpdate(true);
     setcurrentIndex(index);
@@ -50,12 +59,13 @@ function Index() {
         <Formik
           initialValues={initialValues}
           enableReinitialize={true}
-          onSubmit={(values) => {
+          onSubmit={async (values) => {
             let temp = [...data];
             if (isUpdate) {
-              temp[currentIndex] = values;
+              temp[currentIndex] =await updateMovie(values);
             } else {
-              temp.push(values);
+              values.id=uuidv4();
+              temp.push(await createMovie(values));
             }
             setdata(temp);
             if(isUpdate)
@@ -66,9 +76,8 @@ function Index() {
               dispatch(addMovieAction(temp))
        
             }
-         
+            console.log(temp);
             setisUpdate(false);
-            console.log("data is ", data);
           }}
           validationSchema={validate}
         >
@@ -133,7 +142,7 @@ function Index() {
         <br />
       </div>
       <div className="col-9 mx-auto">
-        {myState.map((movie, index) => (
+        {myState && myState?.map((movie, index) => (
           <MovieCard
             key={index}
             movie={{ ...movie, index }}

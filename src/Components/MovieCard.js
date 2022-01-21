@@ -5,6 +5,7 @@ import updateicon from "../updateicon.svg";
 import Rate from "./Rate";
 
 function MovieCard({ movie,updateMovie, deleteMovie }) {
+  console.log(movie);
   return (
     <div>
       <Card>
@@ -13,7 +14,7 @@ function MovieCard({ movie,updateMovie, deleteMovie }) {
             {movie.name} <Rate rating={movie.rating}/>
             <img
               className="float-right" alt="delete"
-              onClick={() => deleteMovie(movie.index)}
+              onClick={() => deleteMovie(movie.index,movie.id)}
               src={cross}
             />{" "}
             <img className="float-right " alt="update"
